@@ -42,6 +42,7 @@ martingala (){
   echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} Cuanto dinero quieres apostar? -> ${endColour}" && read initial_bet
   echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} A que deseas apostar contininuamente ?${endColour}${blueColour} (${endColour}${lightYellowColour}Par${blueColour}/${endColour}${lightYellowColour}Impar${endColour}${blueColour})${endColour} -> " && read even_odd
  
+  back_initial_bet=$initial_bet
   tput civis
   while true; do
     randomNumber="$(($RANDOM % 37))"
@@ -51,14 +52,25 @@ martingala (){
     if [ "$even_odd" == "par" ]; then
       if [ "$(($randomNumber % 2))" -eq 0 ]; then
         if [ "$randomNumber" -eq 0 ]; then
-          echo -e "\n${redColour}[!]${endColour}${whiteColour} Ha salido ${redColour}0${endColour} ${whiteColour}Perdemos!${endColour}"
+          echo -e "\n${redColour}[!]${endColour}${redColour} Ha salido 0 Perdemos!${endColour}"
+          totalMoney=$(($totalMoney - $initial_bet))
+          initial_bet=$(($initial_bet * 2))
+          echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
         else
-          echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Jugada ${endColour}${greenColour}Par${endColour}${whiteColour} Ganamos!${endColour}"
+          echo -e "\n${greenColour}[!] Jugada Par Ganamos!${endColour}"
+          initial_bet=$back_initial_bet 
+          reward=$(($initial_bet * 2))
+          totalMoney=$(($totalMoney + $reward))
+          echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
+
         fi
       else
-        echo -e "\n${redColour}[!]${endColour}${whiteColour} Jugada ${endColour}${redColour}Impar${endColour}${whiteColour} Perdemos!${endColour}"
+        echo -e "\n${redColour}[!]${endColour}${redColour} Jugada Impar Perdemos!${endColour}"
+        totalMoney=$(($totalMoney - $initial_bet))
+        initial_bet=$(($initial_bet * 2))
+        echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
       fi
-      sleep 0.4
+      sleep 0.2
 
     fi
   done
