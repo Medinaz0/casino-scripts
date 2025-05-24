@@ -84,8 +84,6 @@ martingala (){
       echo -e "\n${yellowColour}=> ${endColour}${whiteColour}Han habido un total de ${endColour}${yellowColour}$play_counter${endColour}${whiteColour} Jugadas${endColour}"
       echo -e "\n${yellowColour}=> ${endColour}${whiteColour}Ultimas jugadas malas consecutivas:${endColour}"
       echo -e "${grayColour}$jugadas_malas${endColour}"
-      
-
       tput cnorm;exit 0
     else
       echo -e "\n${redColour}[!]${endColour}${redColour} Te has quedado sin dinero!${endColour}"
