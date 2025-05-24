@@ -44,8 +44,10 @@ martingala (){
   echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} A que deseas apostar contininuamente ?${endColour}${blueColour} (${endColour}${lightYellowColour}Par${blueColour}/${endColour}${lightYellowColour}Impar${endColour}${blueColour})${endColour} -> " && read even_odd
  
   back_initial_bet=$initial_bet
-  play_counter=1
+  play_counter=0
   jugadas_malas=""
+  max_money=0
+  maxm_play=0
 
   tput civis
   while true; do
@@ -68,7 +70,11 @@ martingala (){
             reward=$(($initial_bet * 2))
             totalMoney=$(($totalMoney + $reward))
             jugadas_malas=""
-#           echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
+            if [ "$totalMoney" -gt "$max_money" ]; then
+              max_money=$totalMoney  
+              maxm_play=$play_counter
+            fi          
+#            echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
           fi
         else
 #         echo -e "\n${redColour}[!]${endColour}${redColour} Jugada Impar Perdemos!${endColour}"
@@ -92,23 +98,28 @@ martingala (){
             initial_bet=$(($initial_bet * 2))
             jugadas_malas+="$randomNumber "
            fi
-        else
+         else
 #         echo -e "\n${redColour}[!]${endColour}${redColour} Jugada Impar Perdemos!${endColour}"
 #         echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
           initial_bet=$back_initial_bet 
           reward=$(($initial_bet * 2))
           totalMoney=$(($totalMoney + $reward))
           jugadas_malas=""
-        fi
+          if [ "$totalMoney" -gt "$max_money" ]; then
+                max_money=$totalMoney
+                maxm_play=$play_counter
+          fi
+         fi
       else
         echo -e "\n${redColour}[!]${endColour}${redColour} No existe la jugada ($even_odd)${endColour}"
         tput cnorm;exit 0
       fi
     elif [ "$initial_bet" -gt "$totalMoney" ]; then
-      echo -e "\n${redColour}[!]${endColour}${redColour} Te has quedado sin dinero suficiente!${endColour}${whiteColour} No puedes apostar ${endColour}${blueColour}$initial_bet\$${endColour}${whiteColour} teniendo ${endColour}${greenColour}$totalMoney\$${endColour}"
+      echo -e "\n${redColour}[!]${endColour}${redColour} Te has quedado sin dinero suficiente!${endColour}${whiteColour} No puedes apostar ${endColour}${greenColour}$initial_bet\$${endColour}${whiteColour} teniendo ${endColour}${greenColour}$totalMoney\$${endColour}"
       echo -e "\n${yellowColour}=> ${endColour}${whiteColour}Han habido un total de ${endColour}${yellowColour}$play_counter${endColour}${whiteColour} Jugadas${endColour}"
+      echo -e "\n${yellowColour}=> ${endColour}${whiteColour}Dinero maximo alcanzado ${endColour}${yellowColour}$max_money${endColour}${whiteColour} en la jugada ${endColour}${lightYellowColour}$maxm_play${endColour}"
       echo -e "\n${yellowColour}=> ${endColour}${whiteColour}Ultimas jugadas malas consecutivas:${endColour}"
-      echo -e "${grayColour}$jugadas_malas${endColour}"
+      echo -e "${blueColour}$jugadas_malas${endColour}"
       tput cnorm;exit 0
     else
       echo -e "\n${redColour}[!]${endColour}${redColour} Te has quedado sin dinero!${endColour}"
