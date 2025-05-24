@@ -52,32 +52,57 @@ martingala (){
     randomNumber="$(($RANDOM % 37))"
     money=$(($totalMoney - $initial_bet))
     if [ ! "$totalMoney" -le 0 ] && [ "$initial_bet" -le "$totalMoney" ]; then
-#      echo -e "\n${yellowColour}=> ${endColour}${whiteColour}Haz apostado${endColour}${blueColour} $initial_bet\$${endColour}${whiteColour} y tienes${endColour}${greenColour} $money\$${endColour}"
-#      echo -e "${yellowColour}=> ${endColour}${whiteColour}Numero${endColour}${blueColour} $randomNumber${endColour}${whiteColour} en jugada${endColour}${purpleColour} $even_odd${endColour}"
+#     echo -e "\n${yellowColour}=> ${endColour}${whiteColour}Haz apostado${endColour}${blueColour} $initial_bet\$${endColour}${whiteColour} y tienes${endColour}${greenColour} $money\$${endColour}"
+#     echo -e "${yellowColour}=> ${endColour}${whiteColour}Numero${endColour}${blueColour} $randomNumber${endColour}${whiteColour} en jugada${endColour}${purpleColour} $even_odd${endColour}"
       if [ "$even_odd" == "par" ]; then
         if [ "$(($randomNumber % 2))" -eq 0 ]; then
           if [ "$randomNumber" -eq 0 ]; then
-#            echo -e "\n${redColour}[!]${endColour}${redColour} Ha salido 0 Perdemos!${endColour}"
+#           echo -e "\n${redColour}[!]${endColour}${redColour} Ha salido 0 Perdemos!${endColour}"
             totalMoney=$(($totalMoney - $initial_bet))
             initial_bet=$(($initial_bet * 2))
             jugadas_malas+="$randomNumber "
-#            echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
+#           echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
           else
-#            echo -e "\n${greenColour}[!] Jugada Par Ganamos!${endColour}"
+#           echo -e "\n${greenColour}[!] Jugada Par Ganamos!${endColour}"
             initial_bet=$back_initial_bet 
             reward=$(($initial_bet * 2))
             totalMoney=$(($totalMoney + $reward))
             jugadas_malas=""
-#            echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
+#           echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
           fi
         else
-#          echo -e "\n${redColour}[!]${endColour}${redColour} Jugada Impar Perdemos!${endColour}"
+#         echo -e "\n${redColour}[!]${endColour}${redColour} Jugada Impar Perdemos!${endColour}"
           totalMoney=$(($totalMoney - $initial_bet))
           initial_bet=$(($initial_bet * 2))
           jugadas_malas+="$randomNumber "
-#          echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
+#         echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
         fi
-#        sleep 0.2
+      elif [ "$even_odd" == "impar" ]; then
+         if [ "$(($randomNumber % 2))" -eq 0 ]; then
+          if [ "$randomNumber" -eq 0 ]; then
+#           echo -e "\n${redColour}[!]${endColour}${redColour} Ha salido 0 Perdemos!${endColour}"
+            totalMoney=$(($totalMoney - $initial_bet))
+            initial_bet=$(($initial_bet * 2))
+            jugadas_malas+="$randomNumber "
+#           echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
+          else
+#           echo -e "\n${greenColour}[!] Jugada Par Ganamos!${endColour}"
+#           echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
+            totalMoney=$(($totalMoney - $initial_bet))
+            initial_bet=$(($initial_bet * 2))
+            jugadas_malas+="$randomNumber "
+           fi
+        else
+#         echo -e "\n${redColour}[!]${endColour}${redColour} Jugada Impar Perdemos!${endColour}"
+#         echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
+          initial_bet=$back_initial_bet 
+          reward=$(($initial_bet * 2))
+          totalMoney=$(($totalMoney + $reward))
+          jugadas_malas=""
+        fi
+      else
+        echo -e "\n${redColour}[!]${endColour}${redColour} No existe la jugada ($even_odd)${endColour}"
+        tput cnorm;exit 0
       fi
     elif [ "$initial_bet" -gt "$totalMoney" ]; then
       echo -e "\n${redColour}[!]${endColour}${redColour} Te has quedado sin dinero suficiente!${endColour}${whiteColour} No puedes apostar ${endColour}${blueColour}$initial_bet\$${endColour}${whiteColour} teniendo ${endColour}${greenColour}$totalMoney\$${endColour}"
