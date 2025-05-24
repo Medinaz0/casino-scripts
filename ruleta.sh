@@ -63,7 +63,6 @@ martingala (){
             reward=$(($initial_bet * 2))
             totalMoney=$(($totalMoney + $reward))
             echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
-
           fi
         else
           echo -e "\n${redColour}[!]${endColour}${redColour} Jugada Impar Perdemos!${endColour}"
@@ -71,11 +70,14 @@ martingala (){
           initial_bet=$(($initial_bet * 2))
           echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
         fi
-        sleep 0.2
+        #sleep 0.2
       fi
+    elif [ "$initial_bet" -gt "$totalMoney" ]; then
+      echo -e "\n${redColour}[!]${endColour}${redColour} Te has quedado sin dinero!, No puedes apostar ${endColour}${blueColour}$initial_bet${endColour}${redColour} teniendo ${endColour}${greenColour}$totalMoney${endColour}"
+      tput cnorm;exit 0
     else
       echo -e "\n${redColour}[!]${endColour}${redColour} Te has quedado sin dinero!${endColour}"
-      exit 0
+      tput cnorm;exit 0
     fi
   done
   tput cnorm
