@@ -136,18 +136,42 @@ inverselabrouchele (){
   declare -a my_sequence=(1 2 3 4)
   echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Secuencia actual: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
   bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
-  unset my_sequence[0]
-  unset my_sequence[-1]
+  #unset my_sequence[0]
+  #unset my_sequence[-1]
   #my_sequence=${my_sequence[@]}
   echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Apostamos ${endColour}${greenColour}$bet\$${endColour} Nueva secuencia${blueColour}[${my_sequence[@]}]${endColour} "
-
-
+  tput civis
   while  true ; do
     randomNumber="$(($RANDOM % 37))"
     money=$(($totalMoney - $bet))
-    echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Numero actual: ${endColour}${greenColour}$randomNumber${endColour} "
+    #echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Numero actual: ${endColour}${greenColour}$randomNumber${endColour} "
+    echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Money actual: ${endColour}${greenColour}$money${endColour} "
+    if [ "$even_odd" == "par" ]; then
+      #echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Elegiste: ${endColour}${greenColour}$even_odd${endColour} "
+      if [ "$(($randomNumber % 2))" -eq 0 ]; then
+        if [ "$randomNumber" -eq 0 ]; then
+          echo -e "\n${lightPurpleColour}[*]${endColour}${redColour} Pierdes Salio 0 ${endColour} "
+        else
+          echo -e "\n${lightPurpleColour}[*]${endColour}${greenColour} Ganas ${endColour} "
+          reward=$(($bet * 2))
+          echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Reward actual: ${endColour}${greenColour}$reward${endColour} "
+          totalMoney=$(($money + $reward)) 
+          echo -e "\n${lightPurpleColour}[*]${endColour}${greenColour} Tienes: ${endColour}${greenColour}$totalMoney${endColour}"
+          my_sequence+=($bet)
+          echo -e "\n${lightPurpleColour}[*]${endColour}Nueva secuencia${blueColour}[${my_sequence[@]}]${endColour} "
+        fi
+      else
+       echo -e "\n${lightPurpleColour}[*]${endColour}${redColour} Pierdes ${endColour} "
+      fi
+    elif [ "$even_odd" == "impar" ]; then
+      echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Elegiste: ${endColour}${greenColour}$even_odd${endColour} "
+    else
+      echo -e "\n${redColour}[!]${endColour}${redColour} No existe la jugada ($even_odd)${endColour}"
+      tput cnorm;exit 0
+    fi
+    sleep 0.4 
   done
-  
+  tput cnorm 
 
 }
 
