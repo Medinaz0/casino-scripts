@@ -39,7 +39,7 @@ helpPanel (){
 
 
 martingala (){
-  echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero Actual: ${endColour}${greenColour}$totalMoney${endColour} "
+  echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero actual: ${endColour}${greenColour}$totalMoney${endColour} "
   echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} Cuanto dinero quieres apostar? -> ${endColour}" && read initial_bet
   echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} A que deseas apostar contininuamente ?${endColour}${blueColour} (${endColour}${lightYellowColour}Par${blueColour}/${endColour}${lightYellowColour}Impar${endColour}${blueColour})${endColour} -> " && read even_odd
  
@@ -130,6 +130,30 @@ martingala (){
   tput cnorm
 }
 
+inverselabrouchele (){
+  echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero actual: ${endColour}${greenColour}$totalMoney${endColour} "
+  echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} A que deseas apostar contininuamente ?${endColour}${blueColour} (${endColour}${lightYellowColour}Par${blueColour}/${endColour}${lightYellowColour}Impar${endColour}${blueColour})${endColour} -> " && read even_odd
+  declare -a my_sequence=(1 2 3 4)
+  echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Secuencia actual: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
+  bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
+  unset my_sequence[0]
+  unset my_sequence[-1]
+  #my_sequence=${my_sequence[@]}
+  echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Apostamos ${endColour}${greenColour}$bet\$${endColour} Nueva secuencia${blueColour}[${my_sequence[@]}]${endColour} "
+
+
+  while  true ; do
+    randomNumber="$(($RANDOM % 37))"
+    money=$(($totalMoney - $bet))
+    echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Numero actual: ${endColour}${greenColour}$randomNumber${endColour} "
+  done
+  
+
+}
+
+
+
+
 while getopts "m:t:h" arg; do
   case $arg in 
     m) totalMoney=$OPTARG;;
@@ -141,6 +165,8 @@ done
 if [ $totalMoney ] && [ $technique ]; then
   if [ "$technique"  == "martingala" ]; then
     martingala
+  elif [[ "$technique" == "inverselabrouchele" ]]; then
+    inverselabrouchele
   else
     echo -e "\t${lightPurpleColour}[!]${endColour}${redColour} No existe esa Tecnica${endColour}"
     helpPanel
