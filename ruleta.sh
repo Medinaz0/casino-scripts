@@ -41,7 +41,7 @@ helpPanel (){
 martingala (){
   echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero actual: ${endColour}${greenColour}$totalMoney${endColour} "
   echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} Cuanto dinero quieres apostar? -> ${endColour}" && read initial_bet
-  echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} A que deseas apostar contininuamente ?${endColour}${blueColour} (${endColour}${lightYellowColour}Par${blueColour}/${endColour}${lightYellowColour}Impar${endColour}${blueColour})${endColour} -> " && read even_odd
+  echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} A que deseas apostar contininuamente ?${endColour}${blueColour} (${endColour}${lightYellowColour}par${blueColour}/${endColour}${lightYellowColour}impar${endColour}${blueColour})${endColour} -> " && read even_odd
  
   back_initial_bet=$initial_bet
   play_counter=0
@@ -132,31 +132,45 @@ martingala (){
 
 inverselabrouchele (){
   echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero actual: ${endColour}${greenColour}$totalMoney${endColour} "
-  echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} A que deseas apostar contininuamente ?${endColour}${blueColour} (${endColour}${lightYellowColour}Par${blueColour}/${endColour}${lightYellowColour}Impar${endColour}${blueColour})${endColour} -> " && read even_odd
+  echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} A que deseas apostar contininuamente ?${endColour}${blueColour} (${endColour}${lightYellowColour}par${blueColour}/${endColour}${lightYellowColour}impar${endColour}${blueColour})${endColour} -> " && read even_odd
   declare -a my_sequence=(1 2 3 4)
-  echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Secuencia actual: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
+  echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Secuencia inicial: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
   bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
-  echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Apostamos ${endColour}${greenColour}$bet\$${endColour} Nueva secuencia${blueColour}[${my_sequence[@]}]${endColour} "
   tput civis
   while  true ; do
     randomNumber="$(($RANDOM % 37))"
     money=$(($totalMoney - $bet))
     #echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Numero actual: ${endColour}${greenColour}$randomNumber${endColour} "
+    echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Apostamos ${endColour}${greenColour}$bet\$${endColour}${whiteColour} Secuencia actual: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
     echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero actual: ${endColour}${greenColour}$money${endColour} "
     if [ "$even_odd" == "par" ]; then
       #echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Elegiste: ${endColour}${greenColour}$even_odd${endColour} "
       if [ "$(($randomNumber % 2))" -eq 0 ]; then
         if [ "$randomNumber" -eq 0 ]; then
           echo -e "\n${lightPurpleColour}[*]${endColour}${redColour} Pierdes Salio 0 ${endColour} "
+          totalMoney=$(($totalMoney - $bet))
+          unset my_sequence[0]
+          unset my_sequence[-1] 2>/dev/null
+          my_sequence=(${my_sequence[@]})
+          echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Nueva secuencia${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
+          if [ "${#my_sequence[@]}" -ne 1 ] && [ "${#my_sequence[@]}" -ne 0 ]; then
+            bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
+          elif [ "${#my_sequence[@]}" -eq 1 ]; then
+            bet=${my_sequence[0]}
+          else
+            echo -e "\n${redColour}[!]${endColour}${redColour} Perdimos la secuencia${endColour}"
+            my_sequence=(1 2 3 4)
+            echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Reestablecemos la secuencia a: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
+          fi
         else
           echo -e "\n${lightPurpleColour}[*]${endColour}${greenColour} Ganas ${endColour} "
           reward=$(($bet * 2))
-          echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Reward actual: ${endColour}${greenColour}$reward${endColour} "
+          echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Reward: ${endColour}${purpleColour}$reward${endColour} "
           totalMoney=$(($money + $reward)) 
           echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Tienes: ${endColour}${greenColour}$totalMoney${endColour}"
           my_sequence+=($bet)
-          echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Nueva secuencia${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
-          if [ "${#my_sequence[@]}" -ne 1 ]; then
+           #echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Nueva secuencia${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
+          if [ "${#my_sequence[@]}" -ne 1 ] && [ "${#my_sequence[@]}" -ne 0 ] ; then
             bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
           elif [ "${#my_sequence[@]}" -eq 1 ]; then
             bet=${my_sequence[0]}
@@ -164,6 +178,21 @@ inverselabrouchele (){
         fi
       else
        echo -e "\n${lightPurpleColour}[*]${endColour}${redColour} Pierdes ${endColour} "
+       totalMoney=$(($totalMoney - $bet))
+       unset my_sequence[0]
+       unset my_sequence[-1] 2>/dev/null
+       my_sequence=(${my_sequence[@]})
+       echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Nueva secuencia${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
+       if [ "${#my_sequence[@]}" -ne 1 ] && [ "${#my_sequence[@]}" -ne 0 ]; then
+        bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
+       elif [ "${#my_sequence[@]}" -eq 1 ]; then
+        bet=${my_sequence[0]}
+       else
+        echo -e "\n${redColour}[!]${endColour}${redColour} Perdimos la secuencia${endColour}"
+        my_sequence=(1 2 3 4)
+        echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Reestablecemos la secuencia a: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
+        bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
+       fi
       fi
     elif [ "$even_odd" == "impar" ]; then
       echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Elegiste: ${endColour}${greenColour}$even_odd${endColour} "
