@@ -211,7 +211,41 @@ inverselabrouchele (){
            fi
           fi
         elif [ "$even_odd" == "impar" ]; then
-          echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Elegiste: ${endColour}${greenColour}$even_odd${endColour} "
+          #echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Elegiste: ${endColour}${greenColour}$even_odd${endColour} "
+          if [ "$(($randomNumber % 2))" -eq 1 ]; then
+            echo -e "\n${lightPurpleColour}[*]${endColour}${greenColour} Ganas ${endColour} "
+            reward=$(($bet * 2))
+            echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Reward: ${endColour}${purpleColour}$reward${endColour} "
+            totalMoney=$(($money + $reward)) 
+            echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Tienes: ${endColour}${greenColour}$totalMoney${endColour}"
+            my_sequence+=($bet)
+            if [ "${#my_sequence[@]}" -ne 1 ] && [ "${#my_sequence[@]}" -ne 0 ]; then
+              bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
+            elif [ "${#my_sequence[@]}" -eq 1 ]; then
+              bet=${my_sequence[0]}
+            fi
+          else
+            if [ "$randomNumber" -eq 0 ]; then
+              echo -e "\n${lightPurpleColour}[*]${endColour}${redColour} Pierdes Salió 0 ${endColour} "
+            else
+              echo -e "\n${lightPurpleColour}[*]${endColour}${redColour} Pierdes ${endColour} "
+            fi
+            totalMoney=$(($totalMoney - $bet))
+            unset my_sequence[0]
+            unset my_sequence[-1] 2>/dev/null
+            my_sequence=(${my_sequence[@]})
+            echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Nueva secuencia${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
+            if [ "${#my_sequence[@]}" -ne 1 ] && [ "${#my_sequence[@]}" -ne 0 ]; then
+              bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
+            elif [ "${#my_sequence[@]}" -eq 1 ]; then
+              bet=${my_sequence[0]}
+            else
+              echo -e "\n${redColour}[!]${endColour}${redColour} Perdimos la secuencia${endColour}"
+              my_sequence=(1 2 3 4)
+              echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Reestablecemos la secuencia a: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
+              bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
+            fi
+          fi
         else
           echo -e "\n${redColour}[!]${endColour}${redColour} No existe la jugada ($even_odd)${endColour}"
           tput cnorm;exit 0
