@@ -135,6 +135,7 @@ inverselabrouchele (){
   echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} A que deseas apostar contininuamente ?${endColour}${blueColour} (${endColour}${lightYellowColour}par${blueColour}/${endColour}${lightYellowColour}impar${endColour}${blueColour})${endColour} -> " && read even_odd
   declare -a my_sequence=(1 2 3 4)
   play_counter=0
+  bet_to_renew=$(($totalMoney + 50))
   echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Secuencia inicial: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
   bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
   tput civis
@@ -142,6 +143,14 @@ inverselabrouchele (){
     randomNumber="$(($RANDOM % 37))"
     money=$(($totalMoney - $bet))
     if [ ! "$totalMoney" -le 0  ] ; then
+      if [ $totalMoney -gt $bet_to_renew ]; then
+        echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero actual alcanzo el tope: ${endColour}${yellowColour}$bet_to_renew\$${endColour} "
+        let bet_to_renew+=50
+        echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Nuevo tope establecido en: ${endColour}${yellowColour}$bet_to_renew\$${endColour} "
+        my_sequence=(1 2 3 4)
+        echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Reestablecemos la secuencia a: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
+        bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
+      fi
       #echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Numero actual: ${endColour}${greenColour}$randomNumber${endColour} "
       echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Apostamos ${endColour}${greenColour}$bet\$${endColour}${whiteColour} Secuencia actual: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
       echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero actual: ${endColour}${greenColour}$money${endColour} "
