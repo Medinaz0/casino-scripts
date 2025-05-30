@@ -85,19 +85,19 @@ martingala (){
         fi
       elif [ "$even_odd" == "impar" ]; then
          if [ "$(($randomNumber % 2))" -eq 0 ]; then
-          if [ "$randomNumber" -eq 0 ]; then
-#           echo -e "\n${redColour}[!]${endColour}${redColour} Ha salido 0 Perdemos!${endColour}"
-            totalMoney=$(($totalMoney - $initial_bet))
-            initial_bet=$(($initial_bet * 2))
-            jugadas_malas+="$randomNumber "
-#           echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
-          else
-#           echo -e "\n${greenColour}[!] Jugada Par Ganamos!${endColour}"
-#           echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
-            totalMoney=$(($totalMoney - $initial_bet))
-            initial_bet=$(($initial_bet * 2))
-            jugadas_malas+="$randomNumber "
-           fi
+            if [ "$randomNumber" -eq 0 ]; then
+#             echo -e "\n${redColour}[!]${endColour}${redColour} Ha salido 0 Perdemos!${endColour}"
+              totalMoney=$(($totalMoney - $initial_bet))
+              initial_bet=$(($initial_bet * 2))
+              jugadas_malas+="$randomNumber "
+#             echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
+            else
+#             echo -e "\n${greenColour}[!] Jugada Par Ganamos!${endColour}"
+#             echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
+              totalMoney=$(($totalMoney - $initial_bet))
+              initial_bet=$(($initial_bet * 2))
+              jugadas_malas+="$randomNumber "
+             fi
          else
 #         echo -e "\n${redColour}[!]${endColour}${redColour} Jugada Impar Perdemos!${endColour}"
 #         echo -e "\n${lightBlueColour}[!]${endColour}${whiteColour} Tienes ${endColour}${greenColour}$totalMoney${endColour}"
@@ -136,9 +136,6 @@ inverselabrouchele (){
   declare -a my_sequence=(1 2 3 4)
   echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Secuencia actual: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
   bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
-  #unset my_sequence[0]
-  #unset my_sequence[-1]
-  #my_sequence=${my_sequence[@]}
   echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Apostamos ${endColour}${greenColour}$bet\$${endColour} Nueva secuencia${blueColour}[${my_sequence[@]}]${endColour} "
   tput civis
   while  true ; do
@@ -159,6 +156,11 @@ inverselabrouchele (){
           echo -e "\n${lightPurpleColour}[*]${endColour}${greenColour} Tienes: ${endColour}${greenColour}$totalMoney${endColour}"
           my_sequence+=($bet)
           echo -e "\n${lightPurpleColour}[*]${endColour}Nueva secuencia${blueColour}[${my_sequence[@]}]${endColour} "
+          if [ "${#my_sequence[@]}" -ne 1 ]; then
+            bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
+          elif [ "${#my_sequence[@]}" -eq 1 ]; then
+            bet=${my_sequence[0]}
+          fi
         fi
       else
        echo -e "\n${lightPurpleColour}[*]${endColour}${redColour} Pierdes ${endColour} "
