@@ -209,7 +209,7 @@ inverselabrouchele (){
       tput cnorm;exit 0
     fi
     #sleep 0.4
-    play_counter+=1
+    let play_counter+=1
   done
   tput cnorm 
 
