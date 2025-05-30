@@ -150,6 +150,10 @@ inverselabrouchele (){
         my_sequence=(1 2 3 4)
         echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Reestablecemos la secuencia a: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
         bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
+      elif [ $totalMoney -lt $(($bet_to_renew - 100)) ]; then
+        echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero actual alcanzo el tope minimo${endColour} "
+        let bet_to_renew-=50
+        echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Tope maximo ajustado a ${endColour}${yellowColour}$bet_to_renew${endColour} "
       else
         #echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Numero actual: ${endColour}${greenColour}$randomNumber${endColour} "
         echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Apostamos ${endColour}${greenColour}$bet\$${endColour}${whiteColour} Secuencia actual: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
