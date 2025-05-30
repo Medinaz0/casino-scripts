@@ -134,6 +134,7 @@ inverselabrouchele (){
   echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero actual: ${endColour}${greenColour}$totalMoney${endColour} "
   echo -en "${lightPurpleColour}[*]${endColour}${whiteColour} A que deseas apostar contininuamente ?${endColour}${blueColour} (${endColour}${lightYellowColour}par${blueColour}/${endColour}${lightYellowColour}impar${endColour}${blueColour})${endColour} -> " && read even_odd
   declare -a my_sequence=(1 2 3 4)
+  play_counter=0
   echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Secuencia inicial: ${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
   bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
   tput civis
@@ -204,9 +205,11 @@ inverselabrouchele (){
       fi
     else
       echo -e "\n${redColour}[!]${endColour}${redColour} Te has quedado sin dinero!${endColour}"
+      echo -e "\n${yellowColour}=> ${endColour}${whiteColour}Han habido un total de ${endColour}${yellowColour}$play_counter${endColour}${whiteColour} Jugadas${endColour}"
       tput cnorm;exit 0
     fi
-    #sleep 0.4 
+    #sleep 0.4
+    play_counter+=1
   done
   tput cnorm 
 
