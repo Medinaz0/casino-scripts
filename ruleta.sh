@@ -142,7 +142,7 @@ inverselabrouchele (){
     randomNumber="$(($RANDOM % 37))"
     money=$(($totalMoney - $bet))
     #echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Numero actual: ${endColour}${greenColour}$randomNumber${endColour} "
-    echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Money actual: ${endColour}${greenColour}$money${endColour} "
+    echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Dinero actual: ${endColour}${greenColour}$money${endColour} "
     if [ "$even_odd" == "par" ]; then
       #echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Elegiste: ${endColour}${greenColour}$even_odd${endColour} "
       if [ "$(($randomNumber % 2))" -eq 0 ]; then
@@ -151,11 +151,11 @@ inverselabrouchele (){
         else
           echo -e "\n${lightPurpleColour}[*]${endColour}${greenColour} Ganas ${endColour} "
           reward=$(($bet * 2))
-          echo -e "\n${lightPurpleColour}[*]${endColour}${whiteColour} Reward actual: ${endColour}${greenColour}$reward${endColour} "
+          echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Reward actual: ${endColour}${greenColour}$reward${endColour} "
           totalMoney=$(($money + $reward)) 
-          echo -e "\n${lightPurpleColour}[*]${endColour}${greenColour} Tienes: ${endColour}${greenColour}$totalMoney${endColour}"
+          echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Tienes: ${endColour}${greenColour}$totalMoney${endColour}"
           my_sequence+=($bet)
-          echo -e "\n${lightPurpleColour}[*]${endColour}Nueva secuencia${blueColour}[${my_sequence[@]}]${endColour} "
+          echo -e "${lightPurpleColour}[*]${endColour}${whiteColour} Nueva secuencia${endColour}${blueColour}[${my_sequence[@]}]${endColour} "
           if [ "${#my_sequence[@]}" -ne 1 ]; then
             bet=$((${my_sequence[0]} + ${my_sequence[-1]}))
           elif [ "${#my_sequence[@]}" -eq 1 ]; then
